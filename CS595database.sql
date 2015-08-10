@@ -1,5 +1,7 @@
 CREATE DATABASE cs595database;
 
+USE cs595database;
+
 CREATE TABLE DEVICE (Device_id INT (10), Device_type varchar (30));
 INSERT INTO DEVICE (Device_id, Device_Type) VALUES (1, 'Wrist Sensor');
 INSERT INTO DEVICE (Device_id, Device_Type) VALUES (2, 'Wrist Sensor');
