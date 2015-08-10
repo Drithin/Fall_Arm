@@ -36,7 +36,7 @@ INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone) VALUES
 INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone) VALUES ('Lara', 126, 4, 'House_Five, Stv_St, Fremont', 510329429);
 INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone) VALUES ('George', 127, 5, 'Apt_Six, Alameda, Fremont', 510344433);
 INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone) VALUES ('Ron', 128,6, 'Apt_Six, Warm_Springs, Fremont', 510325455);
-INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone) VALUES ('John', 129, 7, 'Apt_Seven, Warm_Springs, Fremont', 510377466);
+INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone) VALUES ('Eric', 129, 7, 'Apt_Seven, Warm_Springs, Fremont', 510377466);
 
 CREATE TABLE STAFF (Staff_id INT (10), Staff_Name varchar (30), Staff_Designation varchar (30), Staff_Phone varchar (15), Staff_Email varchar (30));
 INSERT INTO STAFF (Staff_id, Staff_Name, Staff_Designation, Staff_Phone, Staff_Email) VALUES(111, 'Emma', 'Nurse', '2247700674', 'emmaw9396@gmail.com');
