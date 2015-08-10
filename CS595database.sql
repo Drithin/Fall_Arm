@@ -1,5 +1,7 @@
 CREATE DATABASE cs595database;
 
+USE cs595database;
+
 CREATE TABLE DEVICE (Device_id INT (10), Device_type varchar (30));
 INSERT INTO DEVICE (Device_id, Device_Type) VALUES (1, 'Wrist Sensor');
 INSERT INTO DEVICE (Device_id, Device_Type) VALUES (2, 'Wrist Sensor');
@@ -18,7 +20,7 @@ INSERT INTO DEVICE_MOTION (Device_id, Patient_id, Patient_Name, DO_AX1, DO_AX2, 
 INSERT INTO DEVICE_MOTION (Device_id, Patient_id, Patient_Name, DO_AX1, DO_AX2, DO_AX3, DO_GX1, DO_GX2, DO_GX3, DATE_TIME) VALUES (6, 128, 'Ron', 2,1,2,1,2,3, '2015:07:25 16:45:10');
 INSERT INTO DEVICE_MOTION (Device_id, Patient_id, Patient_Name, DO_AX1, DO_AX2, DO_AX3, DO_GX1, DO_GX2, DO_GX3, DATE_TIME) VALUES (7, 129, 'Eric', 2,2,1,1,2,3, '2015:07:26 18:25:20');
 
-CREATE TABLE FALL_DATA (Fall_id INT (10), Fall_Type varchar  (30), Fall_Time TIMESTAMP, Patient_id INT (10));
+CREATE TABLE FALL_DATA (Fall_id BIGINT, Fall_Type varchar  (30), Fall_Time TIMESTAMP, Patient_id INT (10));
 INSERT INTO FALL_DATA (Fall_id, Fall_Type, Fall_Time, Patient_id) VALUES(131, 'Not Adverse', '2015-07-20 10:30:20',  123);
 INSERT INTO FALL_DATA (Fall_id, Fall_Type, Fall_Time, Patient_id) VALUES(132, 'Not Adverse', '2015-07-21 15:20:30',  124);
 INSERT INTO FALL_DATA (Fall_id, Fall_Type, Fall_Time, Patient_id) VALUES(133, 'Not Adverse', '2015-07-22 04:25:30',  125);
@@ -34,7 +36,7 @@ INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone) VALUES
 INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone) VALUES ('Lara', 126, 4, 'House_Five, Stv_St, Fremont', 510329429);
 INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone) VALUES ('George', 127, 5, 'Apt_Six, Alameda, Fremont', 510344433);
 INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone) VALUES ('Ron', 128,6, 'Apt_Six, Warm_Springs, Fremont', 510325455);
-INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone) VALUES ('John', 129, 7, 'Apt_Seven, Warm_Springs, Fremont', 510377466);
+INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone) VALUES ('Eric', 129, 7, 'Apt_Seven, Warm_Springs, Fremont', 510377466);
 
 CREATE TABLE STAFF (Staff_id INT (10), Staff_Name varchar (30), Staff_Designation varchar (30), Staff_Phone varchar (15), Staff_Email varchar (30));
 INSERT INTO STAFF (Staff_id, Staff_Name, Staff_Designation, Staff_Phone, Staff_Email) VALUES(111, 'Emma', 'Nurse', '2247700674', 'emmaw9396@gmail.com');

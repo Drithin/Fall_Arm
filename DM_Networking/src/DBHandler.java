@@ -5,129 +5,114 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class DBHandler {
-  private Connection connect = null;
-  private Statement statement = null;
-  private PreparedStatement preparedStatement = null;
-  private ResultSet resultSet = null;
+	private Connection connect = null;
+	private Statement statement = null;
+	private PreparedStatement preparedStatement = null;
 
-  private static final String USERNAME = "drithin";
-  private static final String PASSWORD = "drithinpw";
-  private static final String CONN_STRING = "jdbc:mysql://localhost:3306/cs595database";
-  
-  public DBHandler() {
-	  // this will load the MySQL driver, each DB has its own driver
-      try {
-		Class.forName("com.mysql.jdbc.Driver");
-	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+	private static final String USERNAME = "drithin";
+	private static final String PASSWORD = "drithinpw";
+	private static final String CONN_STRING = "jdbc:mysql://localhost:3306/cs595database";
+
+	public DBHandler() {
+		// this will load the MySQL driver, each DB has its own driver
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// setup the connection with the DB.
+		try {
+			connect = DriverManager.getConnection(CONN_STRING, USERNAME, PASSWORD);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-      // setup the connection with the DB.
-      try {
-		connect = DriverManager.getConnection(CONN_STRING, USERNAME, PASSWORD);
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+
+	public ResultSet getStaffEmail() throws Exception {
+		ResultSet resultSet = null;
+		try {
+
+			// statements allow to issue SQL queries to the database
+			statement = connect.createStatement();
+			// resultSet gets the result of the SQL query
+			preparedStatement = connect.prepareStatement("SELECT * from STAFF");
+			resultSet = preparedStatement.executeQuery();
+			return resultSet;
+		} catch (Exception e) {
+			throw e;
+		}
 	}
-  }
-  
-  public void readDataBase() throws Exception {
-    try {
-      
-      // statements allow to issue SQL queries to the database
-      statement = connect.createStatement();
-      // resultSet gets the result of the SQL query
-      resultSet = statement.executeQuery("select * from PATIENTS");
-      writeResultSet(resultSet);
 
-      preparedStatement = connect
-              .prepareStatement("SELECT * from STAFF");
-          resultSet = preparedStatement.executeQuery();
-          writeResultSet(resultSet);
-      
-      preparedStatement = connect
-          .prepareStatement("SELECT * from STAFF");
-      resultSet = preparedStatement.executeQuery();
-      writeResultSet(resultSet);
-      
-    } catch (Exception e) {
-      throw e;
-    } finally {
-      close();
-    }
+	public ResultSet getPatientInfo(int deviceId) throws Exception {
+		ResultSet resultSet = null;
+		try {
+			// statements allow to issue SQL queries to the database
+			statement = connect.createStatement();
+			// resultSet gets the result of the SQL query
+			preparedStatement = connect
+					.prepareStatement("SELECT Patient_id, Patient_Name, ADDRESS, Phone from PATIENT WHERE Device_id=?");
+			preparedStatement.setInt(1, deviceId);
+			resultSet = preparedStatement.executeQuery();
+			return resultSet;
+		} catch (Exception e) {
+			throw e;
+		}
+	}
 
-  }
-  
-  public void writeData(int device_id, int ax1, int ax2, int ax3, int gx1, int gx2, int gx3, java.sql.Timestamp date) throws SQLException {
-	  // preparedStatements can use variables and are more efficient
-      preparedStatement = connect
-    		  .prepareStatement("INSERT INTO DEVICE_MOTION VALUES(?, ?, ?, ?, ? , ?, ?, ?, ?, ?)");
-      preparedStatement.setInt(1, device_id);
-      preparedStatement.setInt(2, 11);
-      preparedStatement.setString(3, "name__pid");
-      preparedStatement.setInt(4, ax1);
-      preparedStatement.setInt(5, ax2);
-      preparedStatement.setInt(6, ax3);
-      preparedStatement.setInt(7, gx1);
-      preparedStatement.setInt(8, gx2);
-      preparedStatement.setInt(9, gx3);
-      preparedStatement.setTimestamp(10, date);//date);
-      preparedStatement.executeUpdate();
-  }
-  
-  public void writeFallData(int fallType, int patientId) throws SQLException {
-	  int fallId = 0;
-	  
-	  preparedStatement = connect
-    		  .prepareStatement("INSERT INTO FALL_DATA VALUES(?, ?, ?, ?)");
-      preparedStatement.setInt(1, fallId);
-      preparedStatement.setString(2, "Adverse");
-      preparedStatement.setTimestamp(3, new java.sql.Timestamp(new Date().getTime()));
-      preparedStatement.setInt(4, patientId);
-      preparedStatement.executeUpdate();
-  }
+	public void writeData(int device_id, int ax1, int ax2, int ax3, int gx1, int gx2, int gx3, java.sql.Timestamp date)
+			throws Exception {
+		ResultSet patientInfo = getPatientInfo(device_id);
+		if (!patientInfo.next()) {
+			System.out.println("No patient found!");
+			return;
+		}
+		String patientName = patientInfo.getString("Patient_Name");
+		int patientId = patientInfo.getInt("Patient_id");
+		preparedStatement = connect.prepareStatement("INSERT INTO DEVICE_MOTION VALUES(?, ?, ?, ?, ? , ?, ?, ?, ?, ?)");
+		preparedStatement.setInt(1, device_id);
+		preparedStatement.setInt(2, patientId);
+		preparedStatement.setString(3, patientName);
+		preparedStatement.setInt(4, ax1);
+		preparedStatement.setInt(5, ax2);
+		preparedStatement.setInt(6, ax3);
+		preparedStatement.setInt(7, gx1);
+		preparedStatement.setInt(8, gx2);
+		preparedStatement.setInt(9, gx3);
+		preparedStatement.setTimestamp(10, date);// date);
+		preparedStatement.executeUpdate();
+	}
 
-  private void writeMetaData(ResultSet resultSet) throws SQLException {
-    // now get some metadata from the database
-    System.out.println("The columns in the table are: ");
-    System.out.println("Table: " + resultSet.getMetaData().getTableName(1));
-    for  (int i = 1; i<= resultSet.getMetaData().getColumnCount(); i++){
-      System.out.println("Column " +i  + " "+ resultSet.getMetaData().getColumnName(i));
-    }
-  }
+	public void writeFallData(int fallType, int patientId) throws SQLException {
+		Date date = new Date();
+		long fallId = date.getTime();
 
-  private void writeResultSet(ResultSet resultSet) throws SQLException {
-    // resultSet is initialised before the first data set
-    while (resultSet.next()) {
-      String user = resultSet.getString("myuser");
-      String website = resultSet.getString("webpage");
-      String summary = resultSet.getString("summary");
-      Date date = resultSet.getDate("datum");
-      String comment = resultSet.getString("comments");
-      System.out.println("User: " + user);
-      System.out.println("Website: " + website);
-      System.out.println("Summary: " + summary);
-      System.out.println("Date: " + date);
-      System.out.println("Comment: " + comment);
-    }
-  }
+		preparedStatement = connect.prepareStatement("INSERT INTO FALL_DATA VALUES(?, ?, ?, ?)");
+		preparedStatement.setLong(1, fallId);
+		preparedStatement.setString(2, "Adverse");
+		preparedStatement.setTimestamp(3, new java.sql.Timestamp(new Date().getTime()));
+		preparedStatement.setInt(4, patientId);
+		preparedStatement.executeUpdate();
+	}
 
-  // you need to close all three to make sure
-  private void close() {
-    close((Closeable) resultSet);
-    close((Closeable) statement);
-    close((Closeable) connect);
-  }
-  private void close(Closeable c) {
-    try {
-      if (c != null) {
-        c.close();
-      }
-    } catch (Exception e) {
-    	e.printStackTrace();
-    }
-  }
-} 
+	// cleanup resources
+	private void close() {
+		close((java.lang.AutoCloseable) statement);
+		close((java.lang.AutoCloseable) connect);
+	}
+
+	private void close(java.lang.AutoCloseable c) {
+		try {
+			if (c != null) {
+				c.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

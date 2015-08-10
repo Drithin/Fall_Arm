@@ -1,6 +1,6 @@
 import java.net.*;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 import java.io.*;
 
 public class SocketServer extends Thread {
@@ -49,11 +49,13 @@ public class SocketServer extends Thread {
 
 				InputStream is = s.getInputStream();
 				int i = 0;
-
+				int timePassed = 0;
+				Boolean isFalling = false;
+				Thread.sleep(100);
 				while (true) {
-					byte[] b = new byte[256];
+					byte[] b = new byte[2048];
 					int n = is.read(b);
-					if (n == -1)
+					if (n == -1 || n == 0)
 						break;
 					SensorData val = SensorData.ReadByte(b);
 					dataReadings[i] = val;
@@ -61,17 +63,34 @@ public class SocketServer extends Thread {
 					System.out.println("Device:" + val.getDevice_id() + " Acc\tx:" + val.getAccelerator_x() + " y:"
 							+ val.getAccelerator_y() + " z:" + val.getAccelerator_z() + "\tGyro\tx:"
 							+ val.getGyroscope_x() + " y:" + val.getGyroscope_y() + " z:" + val.getGyroscope_z());
-//					dbHandler.writeData(val.getDevice_id(), val.getAccelerator_x(), val.getAccelerator_y(), val.getAccelerator_z(),
-//							val.getGyroscope_x(), val.getGyroscope_y(), val.getGyroscope_z(), 
-//							new java.sql.Date(val.getTimestamp().getTime()));
-					if (fallDetector.Detect(val)) {
-//						MailHandler.sendEmail(dataReadings[i].getDevice_id(), false);
-//						MailHandler.sendEmail(dataReadings[i].getDevice_id(), true);
-						dbHandler.writeFallData(new Date().getSeconds(), 123);
+					dbHandler.writeData(val.getDevice_id(), val.getAccelerator_x(), val.getAccelerator_y(), val.getAccelerator_z(),
+							val.getGyroscope_x(), val.getGyroscope_y(), val.getGyroscope_z(), 
+							new java.sql.Timestamp(val.getTimestamp().getTime()));
+					
+					if (fallDetector.Detect(val) == FallType.Adverse) {
+						System.out.println("------------- Fall detected ---------");
+						if(isFalling)
+							timePassed++; //timePassed in 100ms
+						isFalling = true;
+						//if(timePassed > 12) {
+						ResultSet patientInfo = dbHandler.getPatientInfo(val.getDevice_id());
+						if(!patientInfo.next()) {
+							System.out.println("Could not find patient!");
+							return;
+						}
+						System.out.println("Sending emails..");
+						MailHandler.sendEmail(val.getDevice_id(), this.dbHandler, patientInfo, false);
+						MailHandler.sendEmail(dataReadings[i].getDevice_id(), this.dbHandler, patientInfo, true);
+						System.out.println("saving fall data..");
+						dbHandler.writeFallData(0, patientInfo.getInt("Patient_id"));
+						
 					}
 				}
 			}
 			catch (IOException | SQLException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

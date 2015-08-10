@@ -72,6 +72,13 @@ public class SensorData implements Serializable, Cloneable {
 		this.timestamp = timestamp;
 	}
 	
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
+	}
+	
+
 	public static SensorData ReadByte(byte[] bytes) {
 		SensorData data = null;
 		

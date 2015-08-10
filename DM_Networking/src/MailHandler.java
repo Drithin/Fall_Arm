@@ -1,3 +1,4 @@
+import java.sql.ResultSet;
 import java.util.Properties;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -8,7 +9,7 @@ import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 
 public class MailHandler {	
-	public static void sendEmail(int deviceId, Boolean isSMS) {
+	public static void sendEmail(int deviceId, DBHandler dbHandler, ResultSet patientInfo, Boolean isSMS) {
 		   Properties properties = new Properties();
 		   properties.put("mail.smtp.host", "smtp.gmail.com");
 		   properties.put("mail.smtp.socketFactory.port", "465");
@@ -23,21 +24,32 @@ public class MailHandler {
 		                 return new PasswordAuthentication("dropmeter.cs595@gmail.com", password);
 		              }
 		   });
-		   DatabaseDaoImpl dbService = new DatabaseDaoImpl(isSMS);
-		   String staffEmail = dbService.getStaffEmailId();
-		   //dbService.getStaffEmailId(deviceId);
 		   
 		   try {
-		      Message message = new MimeMessage(session);
-		      message.setFrom(new InternetAddress("dropmeter.cs595@gmail.com", "Bilg")); // Use Sender Email
-		      message.setRecipients(Message.RecipientType.TO,
-		           InternetAddress.parse(staffEmail));
-		      message.setSubject("Alert for XXX");
-		      message.setText("Dear Staff,"
-		         + "\n\n This is an alert send for patient from Device:"
-		         + deviceId);
-		      // To Do: get patientID from DB and attach to message
-		      Transport.send(message);
+			   
+			ResultSet emails = dbHandler.getStaffEmail();
+			
+			String staffEmail = "";
+			while(emails.next()) {
+				staffEmail = emails.getString("Staff_Email");
+				if(isSMS) {
+					  staffEmail = emails.getString("Staff_Phone") + "@tmomail.net";
+					}
+				  Message message = new MimeMessage(session);
+				  message.setFrom(new InternetAddress("dropmeter.cs595@gmail.com", "Bilg")); // Use Sender Email
+				  message.setRecipients(Message.RecipientType.TO,
+				       InternetAddress.parse(staffEmail));
+				  message.setSubject("Alert for " + patientInfo.getString("Patient_Name"));
+				  message.setText("Dear Staff,"
+				 + "\n\n This is an alert send for patient from Device:" + deviceId
+				 + "\n Patient name : " + patientInfo.getString("Patient_Name")
+				 + "\n Address : " + patientInfo.getString("ADDRESS")
+				 + "\n Phone : " + patientInfo.getString("Phone"));
+				  Transport.send(message);
+				  Thread.sleep(100);
+			}
+			  
+		    
 
 		      System.out.println("Done");
 
@@ -48,31 +60,8 @@ public class MailHandler {
 			   e.printStackTrace();
 		   }
 		}
-	
-	 public  static class DatabaseDaoImpl {
-		  public Boolean isSMS; 
-	      public String StaffEmailId;
-	      public int StudentID;
-	      
-	      public DatabaseDaoImpl(Boolean pIsSMS) {
-	    	  this.isSMS = pIsSMS;
-	      }
-	      
-	      public String getStaffEmailId() {
-	         return isSMS ? "2247700674@tmomail.net" : "bilg21@yahoo.com";
-	      }
-	      public void setStaffEmailId(String staffEmailId) {
-	         StaffEmailId = staffEmailId;
-	      }
-	      public int getStudentID() {
-	         return 10686;
-	      }
-	      public void setStudentID(int studentID) {
-	         StudentID = studentID;
-	      }
-	   }
 	 
 	 public static void main(String[] args) {
-		 MailHandler.sendEmail(101, false);
+		 //MailHandler.sendEmail(101, , false);
 	 }
 }

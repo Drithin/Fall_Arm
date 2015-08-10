@@ -7,19 +7,19 @@ public class DataGenerator {
 		SensorData data = new SensorData();
 		int val;
 		
-		val = (int) (Math.random() * 5);
+		val = (int) (Math.random() * 6) + 1;
 		data.setDevice_id(val);
-		val = (int) (Math.random() * 100);
+		val = (int) (Math.random() * 2) + 1;
 		data.setAccelerator_x(val);
-		val = (int) (Math.random() * 100);
+		val = (int) (Math.random() * 2) + 1;
 		data.setAccelerator_y(val);
-		val = (int) (Math.random() * 100);
+		val = (int) (Math.random() * 2) + 1;
 		data.setAccelerator_z(val);
-		val = (int) (Math.random() * 100);
+		val = (int) (Math.random() * 2) + 1;
 		data.setGyroscope_x(val);
-		val = (int) (Math.random() * 100);
+		val = (int) (Math.random() * 2) + 1;
 		data.setGyroscope_y(val);
-		val = (int) (Math.random() * 100);
+		val = (int) (Math.random() * 2) + 1;
 		data.setGyroscope_z(val);
 		data.setTimestamp(new Date());
 		
