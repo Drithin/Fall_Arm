@@ -25,8 +25,8 @@ public class Client {
 
 			// Step 3: Process connection.
 			for(int i = 0; i < 10; i++) {
-				Thread.sleep(1000);
-				System.out.println("i:" + i);
+				Thread.sleep(100);
+				//System.out.println("i:" + i);
 				SensorData data = gen.generate();
 				ByteArrayOutputStream bos = new ByteArrayOutputStream();
 				ObjectOutput out = null;
