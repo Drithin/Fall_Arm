@@ -50,7 +50,7 @@ type RestController struct {
 }
 
 func (serv RestController) Register(message string) {
-	fmt.Println("RAW Message : ", message)
+	fmt.Println("RAW Message :: ", message)
 	var request *Request
 
 	err := json.Unmarshal([]byte(message), &request)
