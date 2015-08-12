@@ -6,6 +6,7 @@ Shall be called by the phone application.
 package main
 
 import (
+	"code.google.com/p/go.net/websocket"
 	"code.google.com/p/gorest"
 	"encoding/json"
 	"flag"
@@ -17,7 +18,7 @@ import (
 )
 
 var (
-	listen     = flag.String("port", ":8580", "web server port")
+	listen     = flag.String("port", ":8080", "web server port")
 	socketPort = flag.String("socketPort", "2347", "socker server port")
 	socketIP   = flag.String("socketIP", "localhost", "socker server IP")
 )
@@ -47,7 +48,12 @@ func main() {
 type RestController struct {
 	gorest.RestService `root:"/controller/" consumes:"application/json" produces:"application/json"`
 	register           gorest.EndPoint `method:"POST" path:"/register/" postdata:"string"`
+	//version            gorest.EndPoint `method:"GET" path:"/register/"`
 }
+
+// func (serv RestController) Version() string {
+// 	return "helo"
+// }
 
 func (serv RestController) Register(message string) {
 	fmt.Println("RAW Message :: ", message)
@@ -59,6 +65,7 @@ func (serv RestController) Register(message string) {
 		sr := toSocketRequest(request)
 		fmt.Println("Formated string : ", sr)
 		//sendToSocketServer(sr)
+		sendNotification(message)
 	} else {
 		fmt.Println("Error occured while parsing json request from phone. ", err)
 	}
@@ -89,4 +96,24 @@ type Request struct {
 	GyrY     string `json:"gyroscope_y"`
 	GyrZ     string `json:"gyroscope_z"`
 	Datetime string `json:"datetime"`
+}
+
+func sendNotification(mess string) {
+	conn, err := websocket.Dial("ws://localhost:8081/receive", "", "http://localhost")
+	checkError(err)
+	fmt.Println("Sending mess over websocket : " + mess)
+	//err = websocket.Message.Send(conn, mess)
+	err = websocket.JSON.Send(conn, mess)
+
+	if err != nil {
+		fmt.Println("Coduln't return msg ", err)
+		return
+	}
+}
+func checkError(err error) {
+	fmt.Println("ERRROR IF ANY : ", err)
+	if err != nil {
+		fmt.Println("Fatal error ", err.Error())
+		//os.Exit(1)
+	}
 }
