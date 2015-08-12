@@ -42,9 +42,10 @@ public class MailHandler {
 				  message.setSubject("Alert for " + patientInfo.getString("Patient_Name"));
 				  message.setText("Dear Staff,"
 				 + "\n\n This is an alert send for patient from Device:" + deviceId
+				 + "\n Patient id : " + patientInfo.getString("Patient_id")
 				 + "\n Patient name : " + patientInfo.getString("Patient_Name")
-				 + "\n Address : " + patientInfo.getString("ADDRESS")
-				 + "\n Phone : " + patientInfo.getString("Phone"));
+				 /*+ "\n Address : " + patientInfo.getString("ADDRESS")
+				 + "\n Phone : " + patientInfo.getString("Phone")*/);
 				  Transport.send(message);
 				  Thread.sleep(100);
 			}

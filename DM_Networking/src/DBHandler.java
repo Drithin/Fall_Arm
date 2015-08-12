@@ -1,11 +1,9 @@
-import java.io.Closeable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class DBHandler {
@@ -13,9 +11,10 @@ public class DBHandler {
 	private Statement statement = null;
 	private PreparedStatement preparedStatement = null;
 
-	private static final String USERNAME = "drithin";
-	private static final String PASSWORD = "drithinpw";
-	private static final String CONN_STRING = "jdbc:mysql://localhost:3306/cs595database";
+	private static final String USERNAME = "fallarm1";//*/"drithin";
+	private static final String PASSWORD = "FallArmCS595";//"drithinpw";
+	//private static final String CONN_STRING = "jdbc:mysql://localhost:3306/cs595database";
+	private static final String CONN_STRING = "jdbc:mysql://fallarm1.cwovqurf2dqe.us-west-2.rds.amazonaws.com:3306/cs595database";
 
 	public DBHandler() {
 		// this will load the MySQL driver, each DB has its own driver
@@ -94,7 +93,7 @@ public class DBHandler {
 
 		preparedStatement = connect.prepareStatement("INSERT INTO FALL_DATA VALUES(?, ?, ?, ?)");
 		preparedStatement.setLong(1, fallId);
-		preparedStatement.setString(2, "Adverse");
+		preparedStatement.setString(2, (fallType == 0 ? "Adverse" : "Not Adverse"));
 		preparedStatement.setTimestamp(3, new java.sql.Timestamp(new Date().getTime()));
 		preparedStatement.setInt(4, patientId);
 		preparedStatement.executeUpdate();

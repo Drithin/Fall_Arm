@@ -57,7 +57,7 @@ public class SocketServer extends Thread {
 					int n = is.read(b);
 					if (n == -1 || n == 0)
 						break;
-					SensorData val = SensorData.ReadByte(b);
+					SensorData val = SensorData.parseFromString(b.toString());
 					dataReadings[i] = val;
 					i = (i + 1) % 100;
 					System.out.println("Device:" + val.getDevice_id() + " Acc\tx:" + val.getAccelerator_x() + " y:"
@@ -72,7 +72,7 @@ public class SocketServer extends Thread {
 						if(isFalling)
 							timePassed++; //timePassed in 100ms
 						isFalling = true;
-						//if(timePassed > 12) {
+
 						ResultSet patientInfo = dbHandler.getPatientInfo(val.getDevice_id());
 						if(!patientInfo.next()) {
 							System.out.println("Could not find patient!");
@@ -80,9 +80,10 @@ public class SocketServer extends Thread {
 						}
 						System.out.println("Sending emails..");
 						MailHandler.sendEmail(val.getDevice_id(), this.dbHandler, patientInfo, false);
-						MailHandler.sendEmail(dataReadings[i].getDevice_id(), this.dbHandler, patientInfo, true);
+						MailHandler.sendEmail(val.getDevice_id(), this.dbHandler, patientInfo, true);
 						System.out.println("saving fall data..");
-						dbHandler.writeFallData(0, patientInfo.getInt("Patient_id"));
+						//if a person has been falling for more than 300ms it will be counted as adverse fall
+						dbHandler.writeFallData((timePassed < 3 ? 1 : 0), patientInfo.getInt("Patient_id"));
 						
 					}
 				}

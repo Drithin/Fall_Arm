@@ -25,7 +25,6 @@ public class Client {
 
 			// Step 3: Process connection.
 			for(int i = 0; i < 10; i++) {
-				Thread.sleep(100);
 				//System.out.println("i:" + i);
 				SensorData data = gen.generate();
 				ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -35,6 +34,7 @@ public class Client {
 				byte[] dataBytes = bos.toByteArray();
 	
 				output.write(dataBytes);
+				Thread.sleep(100);
 			}
 			// Step 4: Close connection.
 			display.append("Transmission complete. " + "Closing connection.\n");

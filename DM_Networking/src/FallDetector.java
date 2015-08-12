@@ -2,7 +2,6 @@ enum FallType {
 	Adverse, NotAdverse, 
 }
 
-
 public class FallDetector {
 	public FallType Detect(SensorData data) {
 		FallType result = FallType.NotAdverse;
