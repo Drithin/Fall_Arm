@@ -30,13 +30,14 @@ INSERT INTO FALL_DATA (Fall_id, Fall_Type, Fall_Time, Patient_id) VALUES(136, 'A
 INSERT INTO FALL_DATA (Fall_id, Fall_Type, Fall_Time, Patient_id) VALUES(137, 'Adverse', '2015-07-26 18:25:20',  129);
 
 CREATE TABLE PATIENT (Patient_Name varchar (30), Patient_id INT (10), Device_id INT (10), ADDRESS varchar (300), Phone INT (10), Password varchar(30));
-INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone) VALUES ('John', 123, 1, 'Suite_Four, Mowry, Fremont', 510320421, 'John123');
-INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone) VALUES ('Jack', 124, 2, 'Suite_Five, Stv_Blvd, Fremont', 510325426, 'Jack123');
-INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone) VALUES ('Michel', 125, 3, 'Floor_Five, Stv_Place, Fremont', 510327427, 'Michel123');
-INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone) VALUES ('Lara', 126, 4, 'House_Five, Stv_St, Fremont', 510329429, 'Lara123');
-INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone) VALUES ('George', 127, 5, 'Apt_Six, Alameda, Fremont', 510344433, 'George123');
-INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone) VALUES ('Ron', 128,6, 'Apt_Six, Warm_Springs, Fremont', 510325455, 'Ron123');
-INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone) VALUES ('Eric', 129, 7, 'Apt_Seven, Warm_Springs, Fremont', 510377466, 'Eric123');
+INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone, Password) VALUES ('John', 123, 1, 'Suite_Four, Mowry, Fremont', 510320421, 'John123');
+INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone, Password) VALUES ('Jack', 124, 2, 'Suite_Five, Stv_Blvd, Fremont', 510325426, 'Jack123');
+INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone, Password) VALUES ('Michel', 125, 3, 'Floor_Five, Stv_Place, Fremont', 510327427, 'Michel123');
+INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone, Password) VALUES ('Lara', 126, 4, 'House_Five, Stv_St, Fremont', 510329429, 'Lara123');
+INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone, Password) VALUES ('George', 127, 5, 'Apt_Six, Alameda, Fremont', 510344433, 'George123');
+INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone, Password) VALUES ('Ron', 128,6, 'Apt_Six, Warm_Springs, Fremont', 510325455, 'Ron123');
+INSERT INTO PATIENT (Patient_Name, Patient_id, Device_id, ADDRESS, Phone, Password) VALUES ('Eric', 129, 7, 'Apt_Seven, Warm_Springs, Fremont', 510377466, 'Eric123');
+INSERT INTO PATIENT (Patient_Name, Password) VALUES('Emma', 'Emma123');
 
 CREATE TABLE STAFF (Staff_id INT (10), Staff_Name varchar (30), Staff_Designation varchar (30), Staff_Phone varchar (15), Staff_Email varchar (30), Password varchar(30));
 INSERT INTO STAFF (Staff_id, Staff_Name, Staff_Designation, Staff_Phone, Staff_Email) VALUES(111, 'Emma', 'Nurse', '2247700674', 'emmaw9396@gmail.com', 'Emma123');
