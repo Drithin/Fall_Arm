@@ -78,6 +78,28 @@ public class SensorData implements Serializable, Cloneable {
 		return super.clone();
 	}
 	
+	public static SensorData parseFromString(String data) {
+		SensorData sensor_data = null;
+		
+		String tokens[] = data.split("\\|");
+		
+		if(tokens.length != 8) {
+			System.out.println(tokens.length + ":error parsing..");
+			return null;
+		}
+		
+		sensor_data = new SensorData();
+		sensor_data.device_id = Integer.parseInt(tokens[0]);
+		sensor_data.accelerator_x = Integer.parseInt(tokens[1]);
+		sensor_data.accelerator_y = Integer.parseInt(tokens[2]);
+		sensor_data.accelerator_z = Integer.parseInt(tokens[3]);
+		sensor_data.gyroscope_x = Integer.parseInt(tokens[4]);
+		sensor_data.gyroscope_y = Integer.parseInt(tokens[5]);
+		sensor_data.gyroscope_z = Integer.parseInt(tokens[6]);
+		sensor_data.timestamp = new Date(tokens[7]);
+		
+		return sensor_data;
+	}
 
 	public static SensorData ReadByte(byte[] bytes) {
 		SensorData data = null;
@@ -137,5 +159,13 @@ public class SensorData implements Serializable, Cloneable {
 		  }
 		}
 		return byteData;
+	}
+	
+	public static void main(String[] args) {
+		SensorData data = parseFromString("4084243999|4|1|1|1|4|5|20150810_230733");
+		System.out.println("Device_id: " + data.device_id);
+		System.out.println("acc_x: " + data.accelerator_x);
+		System.out.println("acc_y: " + data.accelerator_y);
+		System.out.println("acc_z: " + data.accelerator_z);
 	}
 }
