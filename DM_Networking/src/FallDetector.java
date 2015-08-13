@@ -9,7 +9,7 @@ public class FallDetector {
 		double x = data.getAccelerator_x();
 		double y = data.getAccelerator_y();
 		double z = data.getAccelerator_z();
-		double vectorSum = Math.round(x * x + y * y + z * z);
+		double vectorSum = Math.sqrt(x * x + y * y + z * z);
 		System.out.println("vectorSum:" + vectorSum);
 		if(vectorSum > 9)
 			result = FallType.Adverse;

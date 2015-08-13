@@ -161,6 +161,12 @@ public class SensorData implements Serializable, Cloneable {
 		return byteData;
 	}
 	
+	@Override
+	public String toString() {
+		return device_id + "|" + accelerator_x + "|" + accelerator_y + "|" + accelerator_z + "|"
+				+ gyroscope_x + "|" + gyroscope_y + "|" + gyroscope_z + "|" + timestamp;
+	}
+	
 	public static void main(String[] args) {
 		SensorData data = parseFromString("4084243999|4|1|1|1|4|5|20150810_230733");
 		System.out.println("Device_id: " + data.device_id);
