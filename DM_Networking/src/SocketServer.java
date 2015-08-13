@@ -22,6 +22,7 @@ public class SocketServer extends Thread {
 				port = defaultPort;
 
 			ServerSocket ss = new ServerSocket(port);
+			ss.setReuseAddress(true);
 			for (int i = 0; i < num_threads; i++) {
 				SocketServer pes = new SocketServer(ss);
 				// call run()
