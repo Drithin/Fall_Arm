@@ -11,10 +11,10 @@ public class DBHandler {
 	private Statement statement = null;
 	private PreparedStatement preparedStatement = null;
 
-	private static final String USERNAME = "fallarm1";//*/"drithin";
-	private static final String PASSWORD = "FallArmCS595";//"drithinpw";
-	//private static final String CONN_STRING = "jdbc:mysql://localhost:3306/cs595database";
-	private static final String CONN_STRING = "jdbc:mysql://fallarm1.cwovqurf2dqe.us-west-2.rds.amazonaws.com:3306/cs595database";
+	private static final String USERNAME = "root";//*/"drithin";
+	private static final String PASSWORD = "password";//"drithinpw";
+	private static final String CONN_STRING = "jdbc:mysql://localhost:3306/cs595database";
+	//private static final String CONN_STRING = "jdbc:mysql://fallarm1.cwovqurf2dqe.us-west-2.rds.amazonaws.com:3306/cs595database";
 
 	public DBHandler() {
 		// this will load the MySQL driver, each DB has its own driver

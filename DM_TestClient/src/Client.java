@@ -14,7 +14,8 @@ public class Client {
 
 		try {
 			// Step 1: Create a Socket to make connection.
-			client = new Socket(InetAddress.getLocalHost(), 2347);
+//			client = new Socket(InetAddress.getLocalHost(), 2347);
+			client = new Socket(InetAddress.getByName("172.19.7.226"), 2347);
 
 			display.append("Connected to: " + client.getInetAddress().getHostName());
 

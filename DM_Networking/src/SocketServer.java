@@ -57,7 +57,8 @@ public class SocketServer extends Thread {
 					int n = is.read(b);
 					if (n == -1 || n == 0)
 						break;
-					SensorData val = SensorData.parseFromString(b.toString());
+//					SensorData val = SensorData.parseFromString(b.toString());
+					SensorData val = SensorData.ReadByte(b);
 					dataReadings[i] = val;
 					i = (i + 1) % 100;
 					System.out.println("Device:" + val.getDevice_id() + " Acc\tx:" + val.getAccelerator_x() + " y:"
